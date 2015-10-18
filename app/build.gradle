@@ -1,0 +1,81 @@
+apply plugin: 'com.android.application'
+
+android {
+    signingConfigs {
+
+
+        debug {
+            keyAlias 'channel'
+            keyPassword 'gavin6116'
+            storeFile file('I:/key/gavinkey.jks')
+            storePassword 'gavin6116'
+        }
+        release {
+            keyAlias 'channel'
+            keyPassword 'gavin6116'
+            storeFile file('I:/key/gavinkey.jks')
+            storePassword 'gavin6116'
+        }
+    }
+    compileSdkVersion 23
+    buildToolsVersion "23.0.1"
+    defaultConfig {
+        applicationId "com.huihui.android_channel"
+        minSdkVersion 8
+        targetSdkVersion 23
+        versionCode 1
+        versionName "1.0"
+    }
+    buildTypes {
+
+        debug {
+            // 显示Log
+            buildConfigField "boolean", "LOG_DEBUG", "true"
+            versionNameSuffix "-debug"
+            minifyEnabled false
+            zipAlignEnabled false
+            shrinkResources false
+            signingConfig signingConfigs.debug
+        }
+        release {
+            //Zipalign优化
+            zipAlignEnabled true
+
+            // 移除无用的resource文件
+            shrinkResources true
+
+            minifyEnabled false
+            proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+
+            //签名
+            signingConfig signingConfigs.release
+        }
+
+        //渠道Flavors，我这里写了一些常用的
+        productFlavors {
+
+            wandoujia {
+                manifestPlaceholders = [UMENG_CHANNEL: "wandoujia"]
+            }
+
+            baidu {
+                manifestPlaceholders = [UMENG_CHANNEL: "baidu"]
+            }
+
+            c360 {
+                manifestPlaceholders = [UMENG_CHANNEL: "c360"]
+            }
+
+            uc {
+                manifestPlaceholders = [UMENG_CHANNEL: "uc"]
+            }
+
+        }
+    }
+}
+
+dependencies {
+    compile fileTree(dir: 'libs', include: ['*.jar'])
+    testCompile 'junit:junit:4.12'
+    compile 'com.android.support:appcompat-v7:23.0.1'
+}
